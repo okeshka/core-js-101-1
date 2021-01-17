@@ -101,21 +101,27 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-  const clock = new Date(date);
-  const hours = clock.getUTCHours();
-  const minutes = clock.getUTCMinutes();
-  return Math.abs(hours * 5 - minutes) * Math.PI / 180;
+  const hour1 = 1000 * 60 * 60 * 12;
+  const minute1 = 1000 * 60 * 60;
+  const hour2 = (360 * (date % hour1)) / hour1;
+  const minute2 = (360 * (date % minute1)) / minute1;
+  let item = Math.abs(minute2 - hour2);
+  // eslint-disable-next-line no-unused-expressions
+  item > 180 ? item = 360 - item : null;
+  return (item * 2 * Math.PI) / 360;
 }
 
 // function angleBetweenClockHands(date) {
-//   const hour1 = 1000 * 60 * 60 * 12;
-//   const minute1 = 1000 * 60 * 60;
-//   const hour2 = (360 * (date % hour1)) / hour1;
-//   const minute2 = (360 * (date % minute1)) / minute1;
-//   let item = Math.abs(minute2 - hour2);
-//   item > 180 ? item = 360 - item : null;
-//   return (item * 2 * Math.PI) / 360;
+//   const clock = new Date(date);
+//   let hours = clock.getUTCHours();
+//   if (hours > 12) hours -= 12;
+//   const minutes = clock.getUTCMinutes();
+//   let angle = Math.abs(hours * 30 - minutes * 6);
+//   if (angle > 180) angle = 360 - angle;
+//   return angle * Math.PI / 180;
 // }
+
+
 module.exports = {
   parseDataFromRfc2822,
   parseDataFromIso8601,
